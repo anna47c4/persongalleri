@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Persongalleri</title>
+  </head>
+  <body>
+    <section class="data-container"></section>
+    <template>
+      <article class="liste">
+        <h3></h3>
+        <img src="" alt="" />
+        <p class="efternavn"></p>
+        <p class="email"></p>
+      </article>
+    </template>
+
+    <style>
+      img {
+        max-width: 100%;
+      }
+      section {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-gap: 5px;
+      }
+      article {
+        outline: 2px solid black;
+        margin: 5px;
+        padding: 5px;
+        place-items: center;
+        background-color: floralwhite;
+      }
+    </style>
+
+    <script>
+      const url = "https://tema7database-1cc8.restdb.io/rest/medlemmer";
+      const key = "61fcf7e43f215f310a37be5a";
+
+      const options = {
+        headers: {
+          "x-apikey": "61fcf7e43f215f310a37be5a",
+        },
+      };
+
+      async function hentData() {
+        const resspons = await fetch(url, options);
+        const json = await resspons.json();
+        vis(json);
+      }
+
+      function vis(json) {
+        const container = document.querySelector(".data-container");
+        const temp = document.querySelector("template");
+
+        json.forEach((person) => {
+          const klon = temp.cloneNode(true).content;
+          klon.querySelector("h3").textContent = person.fornavn;
+          klon.querySelector("img").src = "faces/" + person.profilbillede;
+          klon.querySelector(".email").textContent = person.email;
+          klon.querySelector(".efternavn").textContent = person.efternavn;
+
+          container.appendChild(klon);
+        });
+      }
+
+      hentData();
+    </script>
+  </body>
+</html>
